@@ -1,16 +1,20 @@
-// src/index.ts
 import {fetchHautoArticlesByKeyword} from './apis/hautoAllPosts'
 
-async function main() {
-  const keywords = ['수학'] // 여기에 원하는 키워드를 추가하세요
+const keywords = ['청담', '후기', '수학', '과외', '상담']
 
-  await Promise.all(
+async function main() {
+  const results = await Promise.all(
     keywords.map(async keyword => {
-      await fetchHautoArticlesByKeyword(keyword)
+      const result = await fetchHautoArticlesByKeyword(keyword)
+      return result
     }),
   )
+
+  results.forEach(result => {
+    console.log(result)
+  })
 }
 
-main().catch(err => {
-  console.error('❌ 전체 실행 중 오류:', err)
+main().catch(error => {
+  console.error('❌ 프로그램 실행 중 오류:', error)
 })
