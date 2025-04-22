@@ -1,0 +1,29 @@
+{
+  "name": "cafe-monitor",
+  "version": "0.0.0",
+  "description": "네이버 카페의 게시글을 자동 모니터링하여, 지정한 키워드에 해당하는 이슈를 탐지하는 TypeScript 기반 크롤러입니다.",
+  "main": "index.js",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/es5es5/CafeMonitor.git"
+  },
+  "author": "Louis Lee",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/es5es5/CafeMonitor/issues"
+  },
+  "homepage": "https://github.com/es5es5/CafeMonitor#readme",
+  "dependencies": {
+    "puppeteer": "^24.6.1"
+  },
+  "devDependencies": {
+    "@types/node": "^22.14.1",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}

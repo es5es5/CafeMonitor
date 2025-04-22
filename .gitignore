@@ -1,0 +1,32 @@
+# Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# TypeScript
+dist/
+*.tsbuildinfo
+
+# VSCode
+.vscode/
+.history/
+
+# Puppeteer cache (브라우저 다운로드 위치)
+.cache/
+# Windows
+Thumbs.db
+Desktop.ini
+
+# macOS
+.DS_Store
+
+# 환경 파일 (로그인 세션 쿠키 등)
+.env
+.env.local
+cookies.json
+
+# Log files
+logs/
+*.log
