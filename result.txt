@@ -1,0 +1,12 @@
+
+> cafe-monitor@0.0.0 start
+> ts-node src/index.ts
+
+📦 전체 응답된 게시글 수: 0
+
+요청 URL: https://apis.naver.com/cafe-web/cafe-boardlist-api/v1/cafes/12877327/menus/0/articles?page=1&pageSize=50&sortBy=TIME&viewType=L
+검색 키워드: 수학
+검색 시각: 2025-04-22 09:50:55
+
+[수학] 로 검색한 게시글이 [0개] 입니다.
+
