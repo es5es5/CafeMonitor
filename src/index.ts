@@ -1,1 +1,1 @@
-console.log("✅ CafeMonitor 시작됨!");
+console.log('✅ CafeMonitor 시작됨!')
