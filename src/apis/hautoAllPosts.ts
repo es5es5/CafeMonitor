@@ -1,75 +1,79 @@
+// src/apis/hautoAllPosts.ts
 import axios from 'axios'
+import dayjs from 'dayjs'
 
-type CafeArticle = {
+export type CafeArticle = {
   articleId: number
   subject: string
-  summary?: string
-  writeDate: string
-  member: {
-    nickname: string
-  }
+  summary: string
+  writeDateTimestamp: number
+  writerNick: string
 }
 
-type CafeArticleListResponse = {
-  data?: {
-    articles: CafeArticle[]
-  }
+export type SearchResult = {
+  keyword: string
+  total: number
+  matched: CafeArticle[]
 }
 
-const CAFE_ID = 12877327
-const MENU_ID = 0
-const PAGE = 1
-const PAGE_SIZE = 50
-
-/**
- * subject 또는 summary 에 keyword 포함 여부 검사
- * 전체 raw 데이터를 콘솔에 출력하여 디버깅 가능
- */
-export async function fetchHautoArticlesByKeyword(keyword: string) {
-  const url = `https://apis.naver.com/cafe-web/cafe-boardlist-api/v1/cafes/${CAFE_ID}/menus/${MENU_ID}/articles?page=${PAGE}&pageSize=${PAGE_SIZE}&sortBy=TIME&viewType=L`
+export async function fetchHautoArticlesByKeyword(
+  keyword: string,
+): Promise<SearchResult> {
+  const baseUrl =
+    'https://apis.naver.com/cafe-web/cafe-boardlist-api/v1/cafes/12877327/menus/0/articles'
+  const url = `${baseUrl}?page=1&pageSize=50&sortBy=TIME&viewType=L`
 
   try {
-    const response = await axios.get<CafeArticleListResponse>(url, {
-      headers: {
-        referer: 'https://cafe.naver.com/',
-        'User-Agent':
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/112.0.0.0 Safari/537.36',
-      },
+    const response = await axios.get(url)
+    const list = response.data?.result?.articleList ?? []
+
+    const extracted: CafeArticle[] = list
+      .filter((entry: any) => entry.type === 'ARTICLE' && entry.item)
+      .map((entry: any) => ({
+        articleId: entry.item.articleId,
+        subject: entry.item.subject,
+        summary: entry.item.summary,
+        writeDateTimestamp: entry.item.writeDateTimestamp,
+        writerNick: entry.item.writerInfo.nickName,
+      }))
+
+    const matched = extracted.filter(article => {
+      const lowerKeyword = keyword.toLowerCase()
+      return (
+        article.subject?.toLowerCase().includes(lowerKeyword) ||
+        article.summary?.toLowerCase().includes(lowerKeyword)
+      )
     })
 
-    const articles = response.data?.data?.articles ?? []
+    const now = dayjs().format('YYYY-MM-DD HH:mm:ss')
 
-    console.log(`📦 전체 응답된 게시글 수: ${articles.length}\n`)
-    articles.forEach((a, i) => {
-      console.log(`[${i + 1}]`)
-      console.log(`ID: ${a.articleId}`)
-      console.log(`제목: ${a.subject}`)
-      console.log(`요약: ${a.summary}`)
-      console.log(`작성자: ${a.member.nickname}`)
-      console.log(`작성일: ${a.writeDate}`)
-      console.log('---------------------------')
-    })
+    console.log(`\n📦 전체 응답된 게시글 수: ${extracted.length}`)
+    console.log(`요청 URL: ${url}`)
+    console.log(`검색 키워드: ${keyword}`)
+    console.log(`검색 시각: ${now}\n`)
 
-    const keywordLower = keyword.toLowerCase()
-    const matched = articles.filter(article => {
-      const subject = article.subject?.toLowerCase() ?? ''
-      const summary = article.summary?.toLowerCase() ?? ''
-      return subject.includes(keywordLower) || summary.includes(keywordLower)
-    })
+    console.log(
+      `[${keyword}] 로 검색한 게시글이 [${matched.length}개] 입니다.\n`,
+    )
+
+    for (const item of matched) {
+      const date = dayjs(item.writeDateTimestamp).format('YYYY-MM-DD')
+      console.log(
+        `${item.articleId} ${item.subject.trim()} ${date} ${item.writerNick}`,
+      )
+    }
 
     return {
       keyword,
       total: matched.length,
-      list: matched.map(a => ({
-        id: a.articleId,
-        subject: a.subject,
-        writeDate: a.writeDate.slice(0, 10),
-        nickname: a.member.nickname,
-      })),
-      requestUrl: url,
+      matched,
     }
-  } catch (error) {
-    console.error('❌ 게시글 수집 중 오류:', error)
-    return {keyword, total: 0, list: [], requestUrl: url}
+  } catch (err) {
+    console.error('❌ 게시글 수집 중 오류:', err)
+    return {
+      keyword,
+      total: 0,
+      matched: [],
+    }
   }
 }
