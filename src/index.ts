@@ -7,7 +7,7 @@ async function main() {
   const 시작시간 = Date.now() // 시작 시간 기록
 
   const 키워드 = ['CMS', '영재관']
-  const 기준날짜 = new Date('2025-04-01')
+  const 기준날짜 = new Date('2025-04-10')
   const 기준페이지 = await fetchStartPageByDate(기준날짜)
 
   const pageResults = await fetchByPageKeywords(키워드, {
