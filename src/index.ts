@@ -1,20 +1,35 @@
-import {fetchHautoArticlesByKeyword} from './apis/hautoAllPosts'
+// index.ts
 
-const keywords = ['청담', '후기', '수학', '과외', '상담']
+import {fetchByPageKeywords} from './services/fetchByPageKeywords'
+
+const keywords = ['CMS', '영재관']
 
 async function main() {
-  const results = await Promise.all(
-    keywords.map(async keyword => {
-      const result = await fetchHautoArticlesByKeyword(keyword)
-      return result
-    }),
-  )
-
-  results.forEach(result => {
-    console.log(result)
+  // 1. 페이지 수 기반 검색
+  const pageResults = await fetchByPageKeywords(keywords, {
+    maxPage: 50,
+    onProgress: (percent: number) => {
+      process.stdout.write(`\r[페이지] 진행률: ${percent}%`)
+    },
   })
+
+  pageResults.forEach(result => {
+    console.log('\n' + result)
+  })
+
+  // console.log('\n\n====================================\n\n')
+
+  // 2. 날짜 기반 검색 (예: 2024년 1월 1일 이후)
+  // const dateResults = await fetchAfterDateKeywords(keywords, {
+  //   afterDate: '2025-01-01',
+  //   onProgress: (percent: number) => {
+  //     process.stdout.write(`\r진행률: ${percent}%`)
+  //   },
+  // })
+
+  // dateResults.forEach(result => {
+  //   console.log('\n' + result)
+  // })
 }
 
-main().catch(error => {
-  console.error('❌ 프로그램 실행 중 오류:', error)
-})
+main().catch(console.error)
