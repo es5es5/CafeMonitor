@@ -1,5 +1,8 @@
+// utils/prettyResult.ts
+
 import dayjs from 'dayjs'
 import {ArticleItem} from '../types/cafeType'
+import {getArticleLink} from './getArticleLink'
 
 export function prettyResult(
   keyword: string,
@@ -27,9 +30,10 @@ export function prettyResult(
       `▶ 작성일: ${dayjs(article.writeDateTimestamp).format('YYYY-MM-DD HH:mm:ss')}`,
     )
     lines.push(`▶ 작성자: ${article.writerInfo.nickName}`)
+    lines.push(`▶ 링크: ${getArticleLink(article.articleId)}`)
     lines.push('────────────────────────────')
   }
-  lines.push('\n\n')
 
+  lines.push('\n\n')
   return lines.join('\n')
 }
