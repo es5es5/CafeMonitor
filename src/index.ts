@@ -3,6 +3,7 @@
 import {fetchByPageKeywords} from './services/fetchByPageKeywords'
 import {fetchStartPageByDate} from './services/fetchStartPageByDate'
 import {exportToCsv} from './utils/exportToCsv'
+import {exportToXlsx} from './utils/exportToXlsx'
 
 async function main() {
   const 시작시간 = Date.now()
@@ -22,7 +23,8 @@ async function main() {
     console.log('\n' + resultText)
 
     if (articles.length > 0) {
-      exportToCsv(keyword, articles, './output') // 폴더만 전달
+      exportToCsv(keyword, articles, './output')
+      exportToXlsx(keyword, articles, './output')
     }
   }
 
