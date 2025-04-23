@@ -2,11 +2,12 @@
 
 import {fetchByPageKeywords} from './services/fetchByPageKeywords'
 import {fetchStartPageByDate} from './services/fetchStartPageByDate'
+import {exportToCsv} from './utils/exportToCsv'
 
 async function main() {
-  const 시작시간 = Date.now() // 시작 시간 기록
+  const 시작시간 = Date.now()
 
-  const 키워드 = ['CMS']
+  const 키워드 = ['CMS', '황소']
   const 기준날짜 = new Date('2025-04-20')
   const 기준페이지 = await fetchStartPageByDate(기준날짜)
 
@@ -17,9 +18,13 @@ async function main() {
     },
   })
 
-  pageResults.forEach(result => {
-    console.log('\n' + result)
-  })
+  for (const {keyword, resultText, articles} of pageResults) {
+    console.log('\n' + resultText)
+
+    if (articles.length > 0) {
+      exportToCsv(keyword, articles, './output') // 폴더만 전달
+    }
+  }
 
   const 종료시간 = Date.now()
   const 소요시간초 = ((종료시간 - 시작시간) / 1000).toFixed(2)

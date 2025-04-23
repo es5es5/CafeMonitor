@@ -17,3 +17,9 @@ export interface CafeApiResponse {
     }[]
   }
 }
+
+export type PageKeywordResult = {
+  keyword: string
+  resultText: string
+  articles: ArticleItem[]
+}
