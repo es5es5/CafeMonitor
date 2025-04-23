@@ -3,37 +3,32 @@
 import {fetchByPageKeywords} from './services/fetchByPageKeywords'
 import {fetchStartPageByDate} from './services/fetchStartPageByDate'
 
-const keywords = ['CMS', '영재관']
-
 async function main() {
-  // 1. 페이지 수 기반 검색
-  // const pageResults = await fetchByPageKeywords(keywords, {
-  //   maxPage: 50,
-  //   onProgress: (percent: number) => {
-  //     process.stdout.write(`\r[페이지] 진행률: ${percent}%`)
-  //   },
-  // })
+  const 시작시간 = Date.now() // 시작 시간 기록
 
-  // pageResults.forEach(result => {
-  //   console.log('\n' + result)
-  // })
+  const 키워드 = ['CMS', '영재관']
+  const 기준날짜 = new Date('2025-04-01')
+  const 기준페이지 = await fetchStartPageByDate(기준날짜)
 
-  // console.log('\n\n====================================\n\n')
+  const pageResults = await fetchByPageKeywords(키워드, {
+    maxPage: 기준페이지,
+    onProgress: (percent: number) => {
+      process.stdout.write(`\r[페이지] 진행률: ${percent}%`)
+    },
+  })
 
-  // 2. 날짜 기반 검색 (예: 2024년 1월 1일 이후)
-  // const dateResults = await fetchAfterDateKeywords(keywords, {
-  //   afterDate: '2025-01-01',
-  //   onProgress: (percent: number) => {
-  //     process.stdout.write(`\r진행률: ${percent}%`)
-  //   },
-  // })
+  pageResults.forEach(result => {
+    console.log('\n' + result)
+  })
 
-  // dateResults.forEach(result => {
-  //   console.log('\n' + result)
-  // })
+  const 종료시간 = Date.now()
+  const 소요시간초 = ((종료시간 - 시작시간) / 1000).toFixed(2)
 
-  const afterDate = new Date('2025-01-01')
-  const result = await fetchStartPageByDate(afterDate)
+  console.log('\n\n====================================')
+  console.log(`기준날짜: ${기준날짜}`)
+  console.log(`키워드: ${키워드}`)
+  console.log(`총 소요 시간: ${소요시간초}초`)
+  console.log('====================================\n')
 }
 
 main().catch(console.error)

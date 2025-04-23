@@ -15,7 +15,6 @@ export async function fetchStartPageByDate(afterDate: Date): Promise<number> {
   console.log(
     `\n📌 입력된 afterDate: ${afterDate.toISOString()} (${afterTimestamp})\n`,
   )
-  console.log(`📚 정렬 기준: 페이지 번호가 작을수록 최신 글\n`)
 
   while (left <= right) {
     const mid = Math.floor((left + right) / 2)
