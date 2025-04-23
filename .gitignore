@@ -30,3 +30,6 @@ cookies.json
 # Log files
 logs/
 *.log
+
+/output
+result.txt
