@@ -1,9 +1,10 @@
 {
   "name": "cafe-monitor",
   "version": "0.0.0",
-  "description": "네이버 카페의 게시글을 자동 모니터링하여, 지정한 키워드에 해당하는 이슈를 탐지하는 TypeScript 기반 크롤러입니다.",
+  "description": "특정 키워드가 포함된 네이버 카페 게시글을 로그인 없이 자동 감지하는 크롤링 도구입니다.",
   "main": "index.js",
   "scripts": {
+    "serve": "ts-node src/index.ts > result.txt",
     "start": "ts-node src/index.ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "build": "tsc"
@@ -21,7 +22,8 @@
   "dependencies": {
     "axios": "^1.8.4",
     "dayjs": "^1.11.13",
-    "puppeteer": "^24.6.1"
+    "puppeteer": "^24.6.1",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "@types/node": "^22.14.1",
